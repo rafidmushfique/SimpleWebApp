@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "LoginPage";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style>
+        .form-control {
+            font-size: 1.9rem;
+            margin-left: 437px;
+        }
+
+        .m-t {
+            margin-top: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div style="text-align:center">
+
+            <form class="m-t" role="form" action="#">
+
+                <input type="text" class="form-control" id="username" placeholder="Username" required="">
+                <input type="password" class="form-control" id="password" placeholder="Password" required="">
+
+                <button type="button" style="margin-top: 11px;" onclick="userLogin();" class="btn btn-primary block full-width m-b">Login</button>
+                <button type="button" style="margin-top: 11px;" onclick="RegisterPage();" class="btn btn-primary block full-width m-b">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var AllUsers = [];
+    $(document).ready(function () {
+        GetAllUsers();
+    })
+    function RegisterPage() {
+        location.href = "http://localhost:63378/Home/RegistrationPage";
+    }
+    function userLogin() {
+        let username = $("#username").val();
+        let password = $("#password").val();
+        if (username === "") {
+            alert("Please Insert User Name.");
+            $("#userName").focus();
+            return false;
+        }
+        if (password === "") {
+            alert("Please Insert Password.");
+            $("#password").focus();
+            return false;
+        }
+        let User = AllUsers.filter(d => d.UserName == username && d.Password == password);
+        if (User.length > 0) {
+           /* alert("LOGIN SUCCESSFUL");*/
+            sessionStorage.setItem("userid", User[0].UserID);
+            if (User[0].UserType == 0) {
+                location.href = "http://localhost:63378/Home/AdminControlPage";
+            }
+            else {
+                location.href = "http://localhost:63378/Home/UserControlPage"
+            }
+            /*  window.location.href = "/ControlPanel/ControlPanel";*/
+        }
+        else {
+            alert("Please enter valid Login Information");
+        }
+    }
+    function GetAllUsers() {
+        let url = "http://localhost:63378/api/Users"
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/json",
+            dataType: 'json',
+            complete: function (response) {
+                AllUsers = response.responseJSON;
+            }
+
+        });
+    }
+
+</script>

@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "RegistrationPage";
+}
+
+<h2>RegistrationPage</h2>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="middle-box text-center loginscreen  animated fadeInDown">
+            <div style="text-align:left">
+
+                <form class="m-t" role="form" action="#">
+                    <label class="">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username" required="">
+
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required="">
+
+                    <label>Mobile</label>
+                    <input type="text" class="form-control" id="mobile" placeholder="Password" required="">
+
+                    <label>Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Password" required="">
+
+                    <label>Age</label>
+                    <input type="text" class="form-control" id="age" placeholder="Password" required="">
+
+                    <button type="submit" style="margin-top: 11px;" onclick="userRegister();" class="btn btn-primary block full-width m-b">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function userRegister() {
+        let username = $('#username').val();
+        let password = $('#password').val();
+        let mobile = $('#mobile').val();
+        let email = $('#email').val();
+        let age = $('#age').val();
+
+        var jsonobj = {
+            "UserName": username,
+            "Password": password,
+            "UserType":1,
+            "Age": age,
+            "Email": email,
+            "Mobile": mobile
+        }
+        let url = "http://localhost:63378/api/Users"
+        $.ajax({
+            type: "POST",
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify(jsonobj),
+            dataType: 'json',
+            complete: function (response) {
+                console.log(response);
+                alert("Registration Successful, Your ID is: " + response.responseJSON.UserID);
+                window.location.href = "/Home/LoginPage";
+            }
+
+        });
+    }
+</script>
